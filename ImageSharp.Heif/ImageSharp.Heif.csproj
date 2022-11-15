@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <version>1.0.0-alpha</version>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <version>1.0.0-alpha.2</version>
     <Authors>red</Authors>
     <RootNamespace>HeyRed.ImageSharp.Heif</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>

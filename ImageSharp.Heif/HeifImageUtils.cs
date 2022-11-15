@@ -8,6 +8,11 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace HeyRed.ImageSharp.Heif;
 
+public static class MathF
+{
+    public static float Round(float a) => (float)Math.Round(a);  
+}
+
 internal static unsafe class HeifImageUtils
 {
     public static void FillImageMetadata(ImageMetadata metadata, HeifImageHandle imageHandle)
