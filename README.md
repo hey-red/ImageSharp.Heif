@@ -43,3 +43,6 @@ using var image = Image.Load(configuration, inputStream);
 // Do something with image
 ...
 ```
+
+## License
+[MIT](LICENSE)
