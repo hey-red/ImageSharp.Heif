@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+	<version>1.0.0-alpha</version>
+	<Authors>red</Authors>
+	<RootNamespace>HeyRed.ImageSharp.Heif</RootNamespace>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<LangVersion>latest</LangVersion>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<Description>HEIF/AVIF decoder for ImageSharp</Description>
+	<PackageProjectUrl>https://github.com/hey-red/ImageSharp.Heif</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/hey-red/ImageSharp.Heif.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>imagesharp;libheif;heif;heic;avif;</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="LibHeifSharp" Version="2.4.0" />
+	<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+  </ItemGroup>
+
+</Project>

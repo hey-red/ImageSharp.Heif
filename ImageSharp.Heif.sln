@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSharp.Heif", "ImageSharp.Heif\ImageSharp.Heif.csproj", "{01F9C9BA-1251-4F87-823C-5ECD1E3A4A4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSharp.Heif.Tests", "ImageSharp.Heif.Tests\ImageSharp.Heif.Tests.csproj", "{8FEEBD46-A603-496E-A443-8187609C2A07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "build\Build.csproj", "{0FF414BF-C1C8-4296-A69C-BF55ED4C6A4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FF414BF-C1C8-4296-A69C-BF55ED4C6A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF414BF-C1C8-4296-A69C-BF55ED4C6A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01F9C9BA-1251-4F87-823C-5ECD1E3A4A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F9C9BA-1251-4F87-823C-5ECD1E3A4A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01F9C9BA-1251-4F87-823C-5ECD1E3A4A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01F9C9BA-1251-4F87-823C-5ECD1E3A4A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FEEBD46-A603-496E-A443-8187609C2A07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FEEBD46-A603-496E-A443-8187609C2A07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FEEBD46-A603-496E-A443-8187609C2A07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FEEBD46-A603-496E-A443-8187609C2A07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9024895E-C806-4CCC-A586-A59AA0595009}
+	EndGlobalSection
+EndGlobal
