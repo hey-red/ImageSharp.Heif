@@ -32,4 +32,12 @@ public class TopLevelImagesTests
 
         Assert.Equal(framesCount, image.Frames.Count);
     }
+
+    [Fact]
+    public void Multiple_images_with_different_sizes_should_throw()
+    {
+        using var inputStream = File.OpenRead(FixturesUtils.GetFixturePath("overlay_1000x680.heic"));
+
+        Assert.Throws<ArgumentException>(() => Image.Load(_configuration, inputStream));
+    }
 }
