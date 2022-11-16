@@ -75,15 +75,12 @@ public sealed class HeifDecoder : IImageDecoder, IImageInfoDetector, IHeifDecode
 
             return DoDecode<TPixel>(imageHandle, decodingOptions);
         }
-        // NOTE: https://github.com/strukturag/heif-gimp-plugin/issues/6
         else
         {
             var topLevelImageIds = context.GetTopLevelImageIds();
 
             Image<TPixel>? resultImage = null;
 
-            // FIXME: what's if frames have different size?
-            // https://github.com/SixLabors/ImageSharp/discussions/1982#discussioncomment-2132564
             for (int i = 0; i < topLevelImageIds.Count; i++)
             {
                 using var imageHandle = context.GetImageHandle(topLevelImageIds[i]);
