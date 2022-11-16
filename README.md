@@ -9,7 +9,7 @@ HEIF/AVIF decoder for [ImageSharp](https://github.com/SixLabors/ImageSharp)
 ## Install
 via [NuGet](https://www.nuget.org/packages/HeyRed.ImageSharp.Heif):
 ```
-PM> Install-Package HeyRed.ImageSharp.Heif -Version 1.0.0-alpha.2
+PM> Install-Package HeyRed.ImageSharp.Heif
 ```
 Native libs for **x64** Linux and Windows:
 ```
