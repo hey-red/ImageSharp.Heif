@@ -42,6 +42,14 @@ public sealed class HeifDecoder : IImageDecoder, IImageInfoDetector, IHeifDecode
     public bool Strict { get; set; }
 
     /// <summary>
+    /// The image decoding mode.
+    /// </summary>
+    /// <remarks>
+    /// Default is <see cref="DecodingMode.PrimaryImage"/>
+    /// </remarks>
+    public DecodingMode DecodingMode { get; set; } = DecodingMode.PrimaryImage;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="TPixel"></typeparam>
@@ -60,10 +68,41 @@ public sealed class HeifDecoder : IImageDecoder, IImageInfoDetector, IHeifDecode
         };
 
         using var context = new HeifContext(stream);
-        // TODO: options(thumbnails, top level images, etc.)
-        using var imageHandle = context.GetPrimaryImageHandle(); // Primary image
 
-        return DoDecode<TPixel>(imageHandle, decodingOptions);
+        if (DecodingMode == DecodingMode.PrimaryImage)
+        {
+            using var imageHandle = context.GetPrimaryImageHandle();
+
+            return DoDecode<TPixel>(imageHandle, decodingOptions);
+        }
+        // NOTE: https://github.com/strukturag/heif-gimp-plugin/issues/6
+        else
+        {
+            var topLevelImageIds = context.GetTopLevelImageIds();
+
+            Image<TPixel>? resultImage = null;
+
+            // FIXME: what's if frames have different size?
+            // https://github.com/SixLabors/ImageSharp/discussions/1982#discussioncomment-2132564
+            for (int i = 0; i < topLevelImageIds.Count; i++)
+            {
+                using var imageHandle = context.GetImageHandle(topLevelImageIds[i]);
+
+                // Root image
+                if (resultImage == null)
+                {
+                    resultImage = DoDecode<TPixel>(imageHandle, decodingOptions);
+                }
+                else
+                {
+                    using var image = DoDecode<TPixel>(imageHandle, decodingOptions);
+
+                    resultImage.Frames.AddFrame(image.Frames.RootFrame);
+                }
+            }
+
+            return resultImage!;
+        }
     }
 
     public Image Decode(Configuration configuration, Stream stream, CancellationToken cancellationToken) =>

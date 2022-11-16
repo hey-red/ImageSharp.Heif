@@ -14,4 +14,6 @@ internal interface IHeifDecoderOptions
     bool IgnoreTransformations { get; }
 
     bool Strict { get; }
+
+    DecodingMode DecodingMode { get; }
 }
