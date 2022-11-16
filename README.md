@@ -45,7 +45,10 @@ using var image = Image.Load(configuration, inputStream);
 ```
 
 # Top level images
+⚠️ Due to the ImageSharp [limitations](https://github.com/SixLabors/ImageSharp/discussions/1982#discussioncomment-2132564), decoding top level images with different sizes are not supported. ⚠️
+
 Note: libheif have some [limitations](https://github.com/strukturag/heif-gimp-plugin/issues/6)
+
 
 By default DecodingMode set to PrimaryImage, but if you want decode all top level images see example listed below:
 
