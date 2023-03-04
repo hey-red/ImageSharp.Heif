@@ -1,6 +1,4 @@
-﻿using SixLabors.ImageSharp;
-
-namespace HeyRed.ImageSharp.Heif.Formats.Avif;
+﻿namespace HeyRed.ImageSharp.Heif.Formats.Avif;
 
 public class AvifMetadata : IDeepCloneable
 {

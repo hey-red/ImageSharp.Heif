@@ -1,10 +1,10 @@
-﻿using LibHeifSharp;
+﻿using HeyRed.ImageSharp.Heif.Formats.Avif;
 
-using SixLabors.ImageSharp;
+using LibHeifSharp;
+
+using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.Metadata.Profiles.Xmp;
-using SixLabors.ImageSharp.Metadata;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace HeyRed.ImageSharp.Heif;
 

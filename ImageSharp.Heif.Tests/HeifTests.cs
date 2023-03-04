@@ -1,6 +1,6 @@
 using HeyRed.ImageSharp.Heif.Formats.Heif;
 
-using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 
 using Xunit.Abstractions;
@@ -12,14 +12,17 @@ namespace ImageSharp.Heif.Tests;
 /// </summary>
 public class HeifTests
 {
-    private readonly Configuration _configuration;
+    private readonly DecoderOptions _decoderOptions;
 
     private readonly ITestOutputHelper _output;
 
     public HeifTests(ITestOutputHelper output)
     {
         _output = output;
-        _configuration = new Configuration(new HeifConfigurationModule());
+        _decoderOptions = new DecoderOptions()
+        {
+            Configuration = new Configuration(new HeifConfigurationModule())
+        };
     }
 
     [Theory]
@@ -37,7 +40,7 @@ public class HeifTests
         _output.WriteLine($"Processing file: \"{fileName}\"");
 
         using var inputStream = File.OpenRead(FixturesUtils.GetFixturePath(fileName));
-        IImageInfo imageInfo = Image.Identify(_configuration, inputStream);
+        ImageInfo imageInfo = Image.Identify(_decoderOptions, inputStream);
 
         Assert.NotNull(imageInfo);
 
@@ -61,7 +64,7 @@ public class HeifTests
     {
         using var inputStream = File.OpenRead(FixturesUtils.GetFixturePath(fileName));
         using var outputStream = new MemoryStream();
-        using var image = Image.Load(_configuration, inputStream);
+        using var image = Image.Load(_decoderOptions, inputStream);
 
         image.Save(outputStream, new JpegEncoder());
 
