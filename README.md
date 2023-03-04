@@ -32,13 +32,14 @@ using SixLabors.ImageSharp;
 using HeyRed.ImageSharp.Heif.Formats.Heif;
 using HeyRed.ImageSharp.Heif.Formats.Avif;
 
-var configuration = new Configuration(
-    new AvifConfigurationModule(),
-    new HeifConfigurationModule());
+var decoderOptions = new DecoderOptions()
+{
+    Configuration = new Configuration(new AvifConfigurationModule())
+};
 
 using var inputStream = File.OpenRead("/path/to/image.avif"); // or image.heic
 
-using var image = Image.Load(configuration, inputStream);
+using var image = Image.Load(decoderOptions, inputStream);
 
 // Do something with image
 ...
@@ -53,16 +54,13 @@ Note: libheif have some [limitations](https://github.com/strukturag/heif-gimp-pl
 By default DecodingMode set to PrimaryImage, but if you want decode all top level images see example listed below:
 
 ```C#
-var configuration = new Configuration(new HeifConfigurationModule());
-
-configuration.ImageFormatsManager.AddImageFormatDetector(new HeifImageFormatDetector());
-configuration.ImageFormatsManager.SetDecoder(HeifFormat.Instance, new HeifDecoder() 
+var decoderOptions = new HeifDecoderOptions
 {
-    DecodingMode = DecodingMode.TopLevelImages,
-});
+    DecodingMode = DecodingMode.TopLevelImages
+};
 
 using var inputStream = File.OpenRead("/path/to/image.avif"); // or image.heic
-using var image = Image.Load(configuration, inputStream);
+using var image = HeifDecoder.Instance.Decode(decoderOptions, inputStream);
 
 // Saves all frames
 for (int i = 0; i < image.Frames.Count; i++)
