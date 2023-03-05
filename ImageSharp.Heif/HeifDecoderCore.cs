@@ -112,13 +112,15 @@ internal sealed class HeifDecoderCore
             {
                 HeifChroma.InterleavedRgb24 => CreateEightBitImageWithoutAlpha(image),
                 HeifChroma.InterleavedRgba32 => CreateEightBitImageWithAlpha(image, imageHandle.IsPremultipliedAlpha),
-                HeifChroma.InterleavedRgb48BE or HeifChroma.InterleavedRgb48LE => CreateSixteenBitImageWithoutAlpha(image),
+                HeifChroma.InterleavedRgb48BE or HeifChroma.InterleavedRgb48LE => 
+                    CreateSixteenBitImageWithoutAlpha(image),
                 HeifChroma.InterleavedRgba64BE or HeifChroma.InterleavedRgba64LE =>
                     CreateSixteenBitImageWithAlpha(image, imageHandle.IsPremultipliedAlpha, imageHandle.BitDepth),
                 _ => throw new InvalidOperationException("Unsupported HeifChroma value."),
             };
 
-            if (image.IccColorProfile != null)
+            if (!_options.GeneralOptions.SkipMetadata && 
+                image.IccColorProfile != null)
             {
                 outputImage.Metadata.IccProfile = new IccProfile(image.IccColorProfile.GetIccProfileBytes());
             }
