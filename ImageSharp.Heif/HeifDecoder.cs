@@ -28,7 +28,11 @@ public sealed class HeifDecoder : SpecializedImageDecoder<HeifDecoderOptions>
         ArgumentNullException.ThrowIfNull(options, nameof(options));
         ArgumentNullException.ThrowIfNull(stream, nameof(stream));
 
-        return new HeifDecoderCore(options).Decode<TPixel>(stream, cancellationToken);
+        Image<TPixel> image = new HeifDecoderCore(options).Decode<TPixel>(stream, cancellationToken);
+
+        ScaleToTargetSize(options.GeneralOptions, image);
+
+        return image;
     }
 
     /// <inheritdoc/>
