@@ -90,10 +90,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="..\ImageSharp.Heif\runtimes\win-x64\native\*.*">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</Content>
-  </ItemGroup>
-
 </Project>
