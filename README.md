@@ -34,12 +34,12 @@ using HeyRed.ImageSharp.Heif.Formats.Avif;
 
 var decoderOptions = new DecoderOptions()
 {
-    Configuration = new Configuration(new AvifConfigurationModule())
+    Configuration = new Configuration(
+        new AvifConfigurationModule(), 
+        new HeifConfigurationModule())
 };
 
-using var inputStream = File.OpenRead("/path/to/image.avif"); // or image.heic
-
-using var image = Image.Load(decoderOptions, inputStream);
+using var image = Image.Load(decoderOptions, "/path/to/image.avif"); // or image.heic
 
 // Do something with image
 ...
@@ -56,10 +56,16 @@ By default DecodingMode set to PrimaryImage, but if you want decode all top leve
 ```C#
 var decoderOptions = new HeifDecoderOptions
 {
-    DecodingMode = DecodingMode.TopLevelImages
+    DecodingMode = DecodingMode.TopLevelImages,
+    // MaxFrames option is also supported
+    GeneralOptions = new DecoderOptions
+    {
+        MaxFrames = 10,
+    }
 };
 
 using var inputStream = File.OpenRead("/path/to/image.avif"); // or image.heic
+
 using var image = HeifDecoder.Instance.Decode(decoderOptions, inputStream);
 
 // Saves all frames
