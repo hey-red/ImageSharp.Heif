@@ -25,7 +25,7 @@ public partial class Build : NukeBuild
     AbsolutePath DownloadDirectory => RootDirectory / "download";
     AbsolutePath BinariesDirectory => RootDirectory / "binaries";
 
-    private const string NATIVE_VERSION = "1.13.0";
+    private const string NATIVE_VERSION = "1.15.1";
 
     private readonly IEnumerable<string> _architectures = new[] { "linux-x64", "win-x64" };
 
