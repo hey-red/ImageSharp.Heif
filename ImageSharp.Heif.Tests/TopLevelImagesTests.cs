@@ -1,5 +1,7 @@
 ﻿using HeyRed.ImageSharp.Heif;
 
+using SixLabors.ImageSharp.Formats;
+
 namespace ImageSharp.Heif.Tests;
 
 public class TopLevelImagesTests
@@ -25,6 +27,27 @@ public class TopLevelImagesTests
         using var image = HeifDecoder.Instance.Decode(_decoderOptions, inputStream);
 
         Assert.Equal(framesCount, image.Frames.Count);
+    }
+
+    [Theory]
+    [InlineData("random_collection_1440x960.heic")]
+    [InlineData("stereo_1200x800.heic")]
+    public void FramesLimitTest(string fileName)
+    {
+        uint framesLimit = 2;
+        var heifDecoderOptions = new HeifDecoderOptions
+        {
+            DecodingMode = DecodingMode.TopLevelImages,
+            GeneralOptions = new DecoderOptions
+            {
+                MaxFrames = framesLimit,
+            }
+        };
+
+        using var inputStream = File.OpenRead(FixturesUtils.GetFixturePath(fileName));
+        using var image = HeifDecoder.Instance.Decode(heifDecoderOptions, inputStream);
+
+        Assert.Equal((int)framesLimit, image.Frames.Count);
     }
 
     [Fact]

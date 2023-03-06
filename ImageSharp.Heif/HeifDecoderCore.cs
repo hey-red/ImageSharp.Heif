@@ -14,11 +14,43 @@ namespace HeyRed.ImageSharp.Heif;
  */
 internal sealed class HeifDecoderCore
 {
-    private readonly HeifDecoderOptions _options;
+    /// <summary>
+    /// The maximum number of frames to decode. Inclusive.
+    /// </summary>
+    private readonly uint maxFrames;
+
+    /// <summary>
+    /// Gets a value indicating whether to ignore encoded metadata when decoding.
+    /// </summary>
+    private readonly bool skipMetadata;
+
+    /// <summary>
+    /// The image decoding mode.
+    /// </summary>
+    private readonly DecodingMode decodingMode;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether high bit-depth images should be converted to 8-bits-per-channel.
+    /// </summary>
+    private readonly bool convertHdrToEightBit;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether transformations are ignored when decoding the image.
+    /// </summary>
+    private readonly bool ignoreTransformations;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether an error is returned for invalid input.
+    /// </summary>
+    private readonly bool strict;
 
     public HeifDecoderCore(HeifDecoderOptions options)
     {
-        _options = options;
+        maxFrames = options.GeneralOptions.MaxFrames;
+        decodingMode = options.DecodingMode;
+        convertHdrToEightBit = options.ConvertHdrToEightBit;
+        ignoreTransformations = options.IgnoreTransformations;
+        strict = options.Strict;
     }
 
     public ImageInfo Identify(Stream stream, CancellationToken cancellationToken)
@@ -41,14 +73,14 @@ internal sealed class HeifDecoderCore
     {
         var decodingOptions = new HeifDecodingOptions
         {
-            ConvertHdrToEightBit = _options.ConvertHdrToEightBit,
-            IgnoreTransformations = _options.IgnoreTransformations,
-            Strict = _options.Strict
+            ConvertHdrToEightBit = convertHdrToEightBit,
+            IgnoreTransformations = ignoreTransformations,
+            Strict = strict,
         };
 
         using var context = new HeifContext(stream, true);
 
-        if (_options.DecodingMode == DecodingMode.PrimaryImage)
+        if (decodingMode == DecodingMode.PrimaryImage)
         {
             using var imageHandle = context.GetPrimaryImageHandle();
 
@@ -56,28 +88,51 @@ internal sealed class HeifDecoderCore
         }
         else
         {
-            var topLevelImageIds = context.GetTopLevelImageIds();
-
             Image<TPixel>? resultImage = null;
 
-            for (int i = 0; i < topLevelImageIds.Count; i++)
+            try
             {
-                using var imageHandle = context.GetImageHandle(topLevelImageIds[i]);
+                var topLevelImageIds = context.GetTopLevelImageIds();
 
-                // Root image
-                if (resultImage == null)
+                uint frameCount = 0;
+                foreach (HeifItemId topLevelImageId in topLevelImageIds)
                 {
-                    resultImage = DoDecode<TPixel>(imageHandle, decodingOptions);
-                }
-                else
-                {
-                    using var image = DoDecode<TPixel>(imageHandle, decodingOptions);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    resultImage.Frames.AddFrame(image.Frames.RootFrame);
+                    using var imageHandle = context.GetImageHandle(topLevelImageId);
+
+                    // Image
+                    if (resultImage == default)
+                    {
+                        resultImage = DoDecode<TPixel>(imageHandle, decodingOptions);
+                    }
+                    // Frame
+                    else
+                    {
+                        ImageFrame<TPixel> frame = DoDecode<TPixel>(imageHandle, decodingOptions).Frames.RootFrame;
+
+                        if (resultImage.Size != frame.Size())
+                        {
+                            throw new ArgumentException("Images with different sizes are not supported");
+                        }
+
+                        resultImage.Frames.AddFrame(frame);
+                    }
+
+                    if (++frameCount == maxFrames)
+                    {
+                        break;
+                    }
                 }
+
+                return resultImage!;
             }
+            catch
+            {
+                resultImage?.Dispose();
 
-            return resultImage!;
+                throw;
+            }
         }
     }
 
@@ -119,14 +174,13 @@ internal sealed class HeifDecoderCore
                 _ => throw new InvalidOperationException("Unsupported HeifChroma value."),
             };
 
-            if (!_options.GeneralOptions.SkipMetadata && 
-                image.IccColorProfile != null)
+            if (!skipMetadata && image.IccColorProfile != null)
             {
                 outputImage.Metadata.IccProfile = new IccProfile(image.IccColorProfile.GetIccProfileBytes());
             }
         }
 
-        if (!_options.GeneralOptions.SkipMetadata)
+        if (!skipMetadata)
         {
             FillImageMetadata(outputImage.Metadata, imageHandle);
         }
