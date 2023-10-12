@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="LibHeifSharp" Version="3.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
   </ItemGroup>
 	
   <ItemGroup>
