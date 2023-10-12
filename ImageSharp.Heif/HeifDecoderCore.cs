@@ -1,6 +1,5 @@
 ﻿using LibHeifSharp;
 
-using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
@@ -14,6 +13,11 @@ namespace HeyRed.ImageSharp.Heif;
  */
 internal sealed class HeifDecoderCore
 {
+    /// <summary>
+    /// The global configuration.
+    /// </summary>
+    private readonly Configuration configuration;
+
     /// <summary>
     /// The maximum number of frames to decode. Inclusive.
     /// </summary>
@@ -46,6 +50,7 @@ internal sealed class HeifDecoderCore
 
     public HeifDecoderCore(HeifDecoderOptions options)
     {
+        configuration = options.GeneralOptions.Configuration;
         maxFrames = options.GeneralOptions.MaxFrames;
         decodingMode = options.DecodingMode;
         convertHdrToEightBit = options.ConvertHdrToEightBit;
@@ -185,7 +190,7 @@ internal sealed class HeifDecoderCore
             FillImageMetadata(outputImage.Metadata, imageHandle);
         }
 
-        return outputImage.CloneAs<TPixel>(outputImage.GetConfiguration());
+        return outputImage.CloneAs<TPixel>(configuration);
     }
 
     private static void FillImageMetadata(ImageMetadata metadata, HeifImageHandle imageHandle)
