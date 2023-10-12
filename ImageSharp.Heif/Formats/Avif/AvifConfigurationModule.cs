@@ -10,6 +10,7 @@ public class AvifConfigurationModule : IImageFormatConfigurationModule
     public void Configure(Configuration configuration)
     {
         configuration.ImageFormatsManager.SetDecoder(AvifFormat.Instance, HeifDecoder.Instance);
+        configuration.ImageFormatsManager.SetEncoder(AvifFormat.Instance, new AvifEncoder());
         configuration.ImageFormatsManager.AddImageFormatDetector(new AvifImageFormatDetector());
     }
 }
